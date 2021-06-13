@@ -3,6 +3,7 @@ package com.example.firestore_crud;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
@@ -80,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
         }else{
             mSaveBtn.setText("Save");
         }
+
+        mShowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ShowActivity.class));
+            }
+        });
 
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
