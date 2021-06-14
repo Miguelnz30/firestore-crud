@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private  MyAdapter adapter;
-    public TouchHelper(int dragDirs, int swipeDirs) {
-        super(dragDirs, swipeDirs);
+    public TouchHelper(MyAdapter adapter) {
+
+        super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        this.adapter = adapter;
     }
 
     @Override
@@ -18,6 +20,12 @@ public class TouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull  RecyclerView.ViewHolder viewHolder, int direction) {
+        final int position = viewHolder.getAdapterPosition();
+        if(direction == ItemTouchHelper.LEFT){
+            adapter.updateData(position);
+            adapter.notifyDataSetChanged();
+        }else {
 
+        }
     }
 }
