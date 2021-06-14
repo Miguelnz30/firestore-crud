@@ -59,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
         db= FirebaseFirestore.getInstance();
 
         Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            mSaveBtn.setText("Update");
+            uTitle = bundle.getString("uTitle");
+            uId = bundle.getString("uDesc");
+            uDesc = bundle.getString("uDesc");
+            uDate = bundle.getString("uDate");
+            uTime = bundle.getString("uTime");
+        } else {
+            mSaveBtn.setText("Save");
+        }
+
         if (bundle != null){
             mSaveBtn.setText("Update");
             uTitle = bundle.getString("uTitle");
@@ -97,15 +108,20 @@ public class MainActivity extends AppCompatActivity {
                 String desc = mDesc.getText().toString();
                 String date = mDateText.getText().toString();
                 String time = mTimeText.getText().toString();
-                String id = UUID.randomUUID().toString();
 
 
-
-                saveToFirestore(id, title, desc, date, time);
-
-
+                Bundle bundle1 = getIntent().getExtras();
+                if(bundle1 != null){
+                    String id = uId;
+                    updateToFireStore(id, title, desc, date, time);
+                } else {
+                    String id = UUID.randomUUID().toString();
+                    saveToFirestore(id, title, desc, date, time);
+                }
             }
         });
+
+
 
         mDatebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +136,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void updateToFireStore(String id, String title, String desc, String date, String time ) {
+        db.collection("Documents").document(id).update(
+                "title", title,
+                "desc", desc,
+                "date", date,
+                "time", time
+        ).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Data update", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void saveToFirestore(String id, String title, String desc, String date, String time){
         if (!title.isEmpty() && !desc.isEmpty()){
             HashMap<String , Object> map = new HashMap<>();
