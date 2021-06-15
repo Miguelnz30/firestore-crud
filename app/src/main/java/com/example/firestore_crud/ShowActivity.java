@@ -24,9 +24,9 @@ public class ShowActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private RecyclerView recyclerView;
     private FirebaseFirestore db;
-    private MyAdapter adapter;
+    public MyAdapter adapter;
     private List<Model> list;
-    SearchView txtBuscar;
+    private SearchView txtBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +83,8 @@ public class ShowActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
-    public boolean onQueryTextChange(String termino) {
-       adapter.filtrado(termino);
+    public boolean onQueryTextChange(String s) {
+       adapter.filtrado(s);
         return false;
     }
 }

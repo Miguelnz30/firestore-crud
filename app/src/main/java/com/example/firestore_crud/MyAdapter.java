@@ -33,11 +33,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         mListOriginal.addAll(mList);
     }
 
-    public void filtrado(String txtBuscar){
+    public void filtrado(final String txtBuscar){
         int logitud = txtBuscar.length();
         if(logitud == 0){
             mList.clear();
             mList.addAll(mListOriginal);
+            activity.showData();
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 List<Model> collecion = mList.stream().filter(i -> i.getTitle().toLowerCase().contains(txtBuscar                        .toLowerCase()))
@@ -45,7 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                 mList.clear();
                 mList.addAll(collecion);
             } else {
-                for (Model m: mList) {
+                for (Model m: mListOriginal) {
                     if(m.getTitle().toLowerCase().contains(txtBuscar.toLowerCase())){
                         mList.add(m);
                     }
