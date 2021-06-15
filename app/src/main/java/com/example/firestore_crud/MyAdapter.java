@@ -15,17 +15,45 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private ShowActivity activity;
     private List<Model> mList;
+    private List<Model> mListOriginal;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public MyAdapter(ShowActivity activity, List<Model> mList) {
         this.activity = activity;
         this.mList = mList;
+        mListOriginal = new ArrayList<>();
+        mListOriginal.addAll(mList);
+    }
+
+    public void filtrado(final String txtBuscar){
+        int logitud = txtBuscar.length();
+        if(logitud == 0){
+            mList.clear();
+            mList.addAll(mListOriginal);
+            activity.showData();
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Model> collecion = mList.stream().filter(i -> i.getTitle().toLowerCase().contains(txtBuscar                        .toLowerCase()))
+                        .collect(Collectors.toList());
+                mList.clear();
+                mList.addAll(collecion);
+            } else {
+                for (Model m: mListOriginal) {
+                    if(m.getTitle().toLowerCase().contains(txtBuscar.toLowerCase())){
+                        mList.add(m);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public void updateData(int position) {

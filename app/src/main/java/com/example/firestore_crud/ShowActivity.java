@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,13 +20,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowActivity extends AppCompatActivity {
+public class ShowActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private RecyclerView recyclerView;
     private FirebaseFirestore db;
-    private MyAdapter adapter;
+    public MyAdapter adapter;
     private List<Model> list;
-
+    private SearchView txtBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class ShowActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        txtBuscar = findViewById(R.id.txtBuscar);
+
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<>();
         adapter = new MyAdapter(this, list);
@@ -44,6 +47,7 @@ public class ShowActivity extends AppCompatActivity {
         ItemTouchHelper touchHelper = new ItemTouchHelper(new TouchHelper(adapter));
         touchHelper.attachToRecyclerView(recyclerView);
         showData();
+        txtBuscar.setOnQueryTextListener(this);
     }
 
     public void showData(){
@@ -71,5 +75,16 @@ public class ShowActivity extends AppCompatActivity {
                 Toast.makeText(ShowActivity.this, "Oops ... something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+       adapter.filtrado(s);
+        return false;
     }
 }
