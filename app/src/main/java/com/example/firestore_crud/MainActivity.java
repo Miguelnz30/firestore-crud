@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDateText , mTimeText;
     private String uDate, uTime;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         mDesc = findViewById(R.id.edit_desc);
         mSaveBtn = findViewById(R.id.save_btn);
         mShowBtn = findViewById(R.id.showall_btn);
+
+
 
 
         mDatebtn = findViewById(R.id.datebtn);
@@ -157,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     private void saveToFirestore(String id, String title, String desc, String date, String time){
@@ -219,4 +226,5 @@ public class MainActivity extends AppCompatActivity {
         } , YEAR , MONTH , DATE);
         datePickerDialog.show();
     }
+
 }
